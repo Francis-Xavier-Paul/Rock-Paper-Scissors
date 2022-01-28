@@ -2,6 +2,11 @@ let playerScore = 0;
 let computerScore = 0;
 let playerSelection = "";
 let computerSelection = "";
+let round = 1;
+
+let rounds = document.querySelector("#round h1");
+const result = document.querySelector('.result');
+let rtext = document.createElement('p');
 
 // Generates random computer selection
 function computerPlay(){
@@ -16,21 +21,33 @@ function computerPlay(){
 }
 
 // Plays one round 
-function playRound(playerSelection, computerSelection)
+function playRound(playerSelection)
 {
+    rounds.textContent = `Round ${round}`;
+    round++;
+    console.log(playerScore);
+    computerSelection = computerPlay();
     if(playerSelection == "rock")
     {
-        if(computerSelection == "rock")
+        if(computerSelection == "rock"){
+            rtext.textContent = "It is a tie. Rock ties with Rock";
+            result.appendChild(rtext);
             return "It is a tie. Rock ties with Rock";
+        }
+            
         else if(computerSelection == "paper")
         {   
             computerScore++;
+            rtext.textContent = "You lose. Paper beats Rock";
+            result.appendChild(rtext);
             return "You lose. Paper beats Rock";
         }
         else
         {
             playerScore++;
-            return "You win. Rock beats Scissors"
+            rtext.textContent = "You won. Rock beats Scissors";
+            result.appendChild(rtext);
+            return "You won. Rock beats Scissors"
         }
     }
 
@@ -39,13 +56,20 @@ function playRound(playerSelection, computerSelection)
         if(computerSelection == "rock")
         {
             playerScore++;
-            return "You win. Paper beats Rock";
+            rtext.textContent = "You won. Paper beats Rock";
+            result.appendChild(rtext);
+            return "You won. Paper beats Rock";
         }
-        else if(computerSelection == "paper")
+        else if(computerSelection == "paper"){
+            rtext.textContent = "It is a tie. Paper ties with Paper";
+            result.appendChild(rtext);
             return "It is a tie. Paper ties with Paper";
+        }
         else
         {
             computerScore++;
+            rtext.textContent = "You loose. Scissors beats paper";
+            result.appendChild(rtext);
             return "You loose. Scissors beats paper"
         }
     }
@@ -55,36 +79,67 @@ function playRound(playerSelection, computerSelection)
         if(computerSelection == "rock")
         {
             computerScore++;
+            rtext.textContent = "You loose. Rock beats Scissors";
+            result.appendChild(rtext);
             return "You loose. Rock beats Scissors";
         }
         else if(computerSelection == "paper")
         {
             playerScore++;
-            return "You win. Scissors beats paper";
+            rtext.textContent = "You won. Scissors beats paper";
+            result.appendChild(rtext);
+            return "You won. Scissors beats paper";
         }
-        else
+        else{
+            rtext.textContent = "It is a tie. Scissors ties with Scissors";
+            result.appendChild(rtext);
             return "It is a tie. Scissors ties with Scissors"
+        }
     }
 }
 
 // Simulates 5 rounds
-function game()
+function game(playerSelection)
 {
-    for(let i = 0; i < 5; i++)
-    {
-        playerSelection = prompt("Your choice");
-        computerSelection = computerPlay();
-        console.log(playRound(playerSelection.toLowerCase(), computerSelection));
-    }
+    playRound(playerSelection);
 
     // Shows results
-    if(playerScore > computerScore)
-        alert("You won with " + playerScore + " wins" );
-    else if(computerScore > playerScore)
-        alert("You lost with " + playerScore + " wins");
-    else
-        alert("It is a tie");
+    if(playerScore == 5){
+        rtext.style.cssText = "font-size:2em"
+        rtext.textContent = "You won 5 rounds";
+        result.appendChild(rtext);
+        playerScore = 0;
+        computerScore = 0;
+        round = 1;
+    }
+    
+    else if(computerScore == 5){
+        rtext.style.cssText = "font-size:2em"
+        rtext.textContent = "You lost. Game Over.";
+        result.appendChild(rtext);
+        playerScore = 0;
+        computerScore = 0;
+        round = 1;
+    }
+
+    else{
+        rtext.style.cssText = "font-size:1.3em"
+    }
 
 }
 
-game();
+
+// selects rps icons
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+
+// Adds eventlistners to icons
+
+rock.addEventListener('click', () => game("rock"));
+paper.addEventListener('click', () => game("paper"));
+scissors.addEventListener('click', () => game("scissors"));
+
+
+
+
